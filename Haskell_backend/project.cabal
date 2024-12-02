@@ -1,0 +1,23 @@
+cabal-version:      2.2
+name:               mytest
+version:            1.0
+build-type:         Simple
+license:            MIT
+
+common deps
+    ghc-options:        -Wall -O
+    default-language:   Haskell2010
+    build-depends:      base, selda, scotty, wai,wai-cors , selda-sqlite, directory, aeson, text, filepath, text-show
+
+library
+    import:             deps
+    hs-source-dirs:     src
+    exposed-modules:    Api, Bdd
+
+executable mytest
+    import:             deps
+    hs-source-dirs:     app
+    main-is:            Main.hs
+    build-depends:      mytest
+
+
