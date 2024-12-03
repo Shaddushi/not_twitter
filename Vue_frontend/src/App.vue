@@ -1,5 +1,6 @@
 <script setup>
   import PersonList from "./components/PersonList.vue"
+  import FormNewUser from "./components/FormNewUser.vue";
   import { ref, onMounted } from 'vue';
   import axios from 'axios';
   const message = ref([]); 
@@ -21,6 +22,7 @@
 <template>
   <div>
     <PersonList :users=message />
+    <FormNewUser></FormNewUser>
   </div>
 </template>
 

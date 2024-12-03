@@ -2,14 +2,14 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE TypeOperators #-}
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Use camelCase" #-}
 
 module Bdd where
 
 import Data.Aeson (ToJSON,toJSON)
-import Control.Monad.IO.Class (liftIO)
 import Database.Selda
 import Database.Selda.SQLite
-import Data.Int 
 import Data.Text (pack)
 
 instance ToJSON (ID a) where
@@ -34,7 +34,7 @@ data Tweet = Tweet
     , tweet_content :: Text
     , creator_id :: ID User
 } deriving (Generic, Show)
- 
+
 instance SqlRow Tweet
 instance ToJSON Tweet
 
@@ -45,8 +45,7 @@ tweet_table = table "Tweet" [ #tweet_id :- autoPrimary
 
 dbSelectUsers :: SeldaT SQLite IO[User]
 dbSelectUsers = query $ do
-    user <- select user_table
-    return user
+    select user_table
 
 
 

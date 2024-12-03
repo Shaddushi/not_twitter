@@ -1,5 +1,5 @@
 cabal-version:      2.2
-name:               mytest
+name:               Twitter
 version:            1.0
 build-type:         Simple
 license:            MIT
@@ -14,10 +14,10 @@ library
     hs-source-dirs:     src
     exposed-modules:    Api, Bdd
 
-executable mytest
+executable Twitter
     import:             deps
     hs-source-dirs:     app
     main-is:            Main.hs
-    build-depends:      mytest
+    build-depends:      Twitter
 
 
