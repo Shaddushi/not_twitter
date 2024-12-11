@@ -7,9 +7,6 @@ import Bdd
 import Web.Scotty
 import Data.Aeson (object, (.=), FromJSON, ToJSON)
 import Database.Selda.SQLite
-import GHC.Generics (Generic)
-import Control.Applicative (liftA)
-
 
 
 -- Définition des routes API
@@ -20,9 +17,9 @@ apiRoutes = do
         users <- liftIO $ withSQLite "twitter.db" dbSelectUsers
         let jsonUsers = object ["users" .= users]
         json jsonUsers
+    -- Route de connexion
     post "/api/submitNewUser" $ do
         userData <-  jsonData :: ActionM NewUser
-        liftIO $ print userData
         returned_value <- liftIO $ withSQLite "twitter.db" (dbCheckUserExist userData)
         if returned_value /= []
             then do

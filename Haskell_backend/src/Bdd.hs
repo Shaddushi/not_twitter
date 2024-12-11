@@ -17,6 +17,11 @@ instance ToJSON (ID a) where
   toJSON = toJSON . pack . show . fromId
 
 
+
+-- #################################################################################################################################
+
+-- Table d'Utilisateur
+
 data User = User
   { user_id :: ID User
   , user_name :: Text
@@ -32,6 +37,8 @@ user_table :: Table User
 user_table = table "User" [#user_id :- autoPrimary, #user_name :- unique]
 
 
+-- Table de tweet
+
 data Tweet = Tweet
     { tweet_id :: ID Tweet
     , tweet_content :: Text
@@ -46,6 +53,8 @@ tweet_table = table "Tweet" [ #tweet_id :- autoPrimary
                             , #creator_id :- foreignKey user_table #user_id]
 
 
+-- Data type pour récupérer le username et mdp du recu de connexion
+
 data NewUser = NewUser
     {
         newusername :: Text,
@@ -56,11 +65,15 @@ instance FromJSON NewUser
 instance ToJSON NewUser
 
 
+-- #################################################################################################################################
+
+-- Selectionne tout les utilisateurs 
 
 dbSelectUsers :: SeldaT SQLite IO[User]
 dbSelectUsers = query $ do
     select user_table
 
+-- Check si l'utilisateur donné existe dans la BDD
 
 dbCheckUserExist :: NewUser -> SeldaT SQLite IO[User]
 dbCheckUserExist (NewUser user user_pswd) = query $ do
@@ -71,6 +84,7 @@ dbCheckUserExist (NewUser user user_pswd) = query $ do
 
 
 
+-- juste pour tester la bdd
 
 dbInit :: SeldaT SQLite IO ()
 dbInit = do
