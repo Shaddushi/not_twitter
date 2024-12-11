@@ -7,10 +7,11 @@
 
 module Bdd where
 
-import Data.Aeson (ToJSON,toJSON)
+import Data.Aeson (ToJSON,toJSON,FromJSON)
 import Database.Selda
 import Database.Selda.SQLite
 import Data.Text (pack)
+import Web.Scotty (rescue)
 
 instance ToJSON (ID a) where
   toJSON = toJSON . pack . show . fromId
@@ -19,14 +20,16 @@ instance ToJSON (ID a) where
 data User = User
   { user_id :: ID User
   , user_name :: Text
+  ,user_pseudo :: Text
+  , user_mdp :: Text
   , user_description :: Text
-  } deriving (Generic, Show)
+  } deriving (Generic, Show,Eq)
 
 instance SqlRow User
 instance ToJSON User
 
 user_table :: Table User
-user_table = table "User" [#user_id :- autoPrimary]
+user_table = table "User" [#user_id :- autoPrimary, #user_name :- unique]
 
 
 data Tweet = Tweet
@@ -43,9 +46,28 @@ tweet_table = table "Tweet" [ #tweet_id :- autoPrimary
                             , #creator_id :- foreignKey user_table #user_id]
 
 
+data NewUser = NewUser
+    {
+        newusername :: Text,
+        newuser_mdp :: Text
+    }deriving (Show, Generic)
+
+instance FromJSON NewUser
+instance ToJSON NewUser
+
+
+
 dbSelectUsers :: SeldaT SQLite IO[User]
 dbSelectUsers = query $ do
     select user_table
+
+
+dbCheckUserExist :: NewUser -> SeldaT SQLite IO[User]
+dbCheckUserExist (NewUser user user_pswd) = query $ do
+    u <- select user_table
+    restrict (u ! #user_name .== literal user)
+    restrict (u ! #user_mdp .== literal user_pswd)
+    return u
 
 
 
@@ -55,11 +77,11 @@ dbInit = do
     createTable user_table
     tryInsert user_table
        [
-        User def  "Orson Welles" "Hello it's me !",
-        User def  "Charlie Chaplin" "howwa",
-        User def  "Claude Perron" "aaaaaaaaaaa",
-        User def   "Albert Dupontel" "i'm cscared of claude",
-        User def   "Fritz Lang" "Haskell movie next"] >>= liftIO . print
+        User def  "Orson Welles" "a" "mdp" "Hello it's me !",
+        User def  "Charlie Chaplin" "a" "mdp" "howwa",
+        User def  "Claude Perron" "a" "mdp" "aaaaaaaaaaa",
+        User def   "Albert Dupontel" "a" "mdp" "i'm cscared of claude",
+        User def   "Fritz Lang" "a" "mdp" "Haskell movie next"] >>= liftIO . print
 
     createTable tweet_table
     tryInsert tweet_table
