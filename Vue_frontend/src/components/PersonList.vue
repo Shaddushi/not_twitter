@@ -11,7 +11,6 @@ const props = defineProps(
   })
 
 const users = computed(() => props.users)
-console.log(users.value)
 
 </script>
 

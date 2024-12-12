@@ -95,6 +95,7 @@ dbInit = do
         User def  "Charlie Chaplin" "a" "mdp" "howwa",
         User def  "Claude Perron" "a" "mdp" "aaaaaaaaaaa",
         User def   "Albert Dupontel" "a" "mdp" "i'm cscared of claude",
+        User def   "a" "a" "mdp" "i'm cscared of claude",           
         User def   "Fritz Lang" "a" "mdp" "Haskell movie next"] >>= liftIO . print
 
     createTable tweet_table
