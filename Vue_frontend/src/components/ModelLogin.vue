@@ -7,8 +7,8 @@
     const user_mdp = ref();
     const incorrect_account = ref(false)
     const emit = defineEmits(['SendUsername'])
-    const isModalOpen = ref(true)
-
+    const usernameEmpty = ref(true)
+    const passwordEmpty = ref(true)
 
     onMounted(() => {
         const myModal = new bootstrap.Modal('#Modal');
@@ -20,11 +20,23 @@
       if(incorrect_account.value){
         incorrect_account.value = !incorrect_account.value
       }
+      if(user_mdp.value.length != 0){
+        passwordEmpty.value = false
+      }
+      else{
+        passwordEmpty.value = true
+      }
     })
     
     watch(user_name,() =>{
       if(incorrect_account.value){
         incorrect_account.value = !incorrect_account.value
+      }
+      if(user_name.value.length != 0){
+        usernameEmpty.value = false
+      }
+      else{
+        usernameEmpty.value = true
       }
     })
 
@@ -37,20 +49,21 @@
               if (myModal) {
                 myModal.hide();
               }
-              isModalOpen.value = false
               console.log(response.data.username)
               emit("SendUsername", response.data.username); 
             }
             else{
               incorrect_account.value = true
             }
+            }).catch((error)=>{
+              console.log(error)
             })
     }
 </script>
 
 
 
-<template v-if="isModalOpen">
+<template >
   
   <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true" data-bs-keyboard="false" data-bs-backdrop="static" >
     <div class="  bordere modal-dialog">
@@ -60,11 +73,11 @@
             Login
           </div>
         </div>
-        <div class="gradient modal-body">
+        <div class="gradient modal-body" >
             <input v-model="user_name" :class="{ error : incorrect_account}" class="input" placeholder="Username" style="margin-top: 5%;">
             <div :class="{ incorrect : incorrect_account}">  </div>
             <input v-model="user_mdp" :class="{ error : incorrect_account}" class="input" placeholder="Password">
-            <button @click="CreateNewUser" class="btn btn-dark" >Confirm</button>
+            <button @click="CreateNewUser" class="btn btn-dark" :disabled="passwordEmpty + usernameEmpty" style="margin-left: 30%;margin-top: 5%;margin-bottom: 10%;">Confirm</button>
         </div>
       </div>
     </div>

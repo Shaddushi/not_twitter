@@ -1,5 +1,5 @@
 <script setup>
-  import PersonList from "./components/PersonList.vue"
+ 
   import ModelLogin from "./components/ModelLogin.vue";
   import { ref, onMounted } from 'vue';
   import axios from 'axios';
@@ -29,11 +29,7 @@
 
 
 <template>
-  <div>
-    
-    <PersonList :users=message />
-    
-  </div>
+  {{currentUser}}
 
   <div v-if="!hasConnected">
       <ModelLogin  @SendUsername="SendUsernamefunc" ></ModelLogin>
