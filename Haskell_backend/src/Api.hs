@@ -29,9 +29,10 @@ apiRoutes = do
                 json $ object ["username" .= user_name (head returned_value), "pseudo" .= user_pseudo  (head returned_value), "valid" .= True]
             else
                 json $ object ["username" .= ("null" :: String), "pseudo" .= ("null" :: String) , "valid" .= False]
+    -- Route pour un certain profil
     post "/api/GetUser" $ do
         userData <- jsonData :: ActionM Text
-        returned_value <- liftIO $ withSQLite "twitter.db" (dbGetUserInfo userData)
+        returned_value <- liftIO $ withSQLite "twitter.db" (dbGetUserInfo userData)     
         if returned_value /= []
             then
                 json $ object ["username" .= user_name (head returned_value),
