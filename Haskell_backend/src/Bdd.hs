@@ -82,6 +82,11 @@ dbCheckUserExist (NewUser user user_pswd) = query $ do
     restrict (u ! #user_mdp .== literal user_pswd)
     return u
 
+dbGetUserInfo :: Text -> SeldaT SQLite IO[User]
+dbGetUserInfo user = query $ do
+    u <- select user_table
+    restrict (u ! #user_name .== literal user)
+    return u                                                                   
 
 
 -- juste pour tester la bdd
