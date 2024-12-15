@@ -3,17 +3,23 @@
     import { ref, onMounted, watch } from 'vue';
     import axios from 'axios';
 
+
     const user_name = ref();
     const user_mdp = ref();
     const incorrect_account = ref(false)
-    const emit = defineEmits(['SendUsername'])
     const usernameEmpty = ref(true)
     const passwordEmpty = ref(true)
+
+    const emit = defineEmits(['SendUsername'])
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     onMounted(() => {
         const myModal = new bootstrap.Modal('#Modal');
         myModal.show();
     })
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     watch(user_mdp,() =>{
@@ -40,8 +46,9 @@
       }
     })
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    function CreateNewUser( ) {
+    function CreateNewUser(){
         let data = JSON.stringify({"newusername":user_name.value, "newuser_mdp": user_mdp.value})
         axios.post('http://localhost:8080/api/submitNewUser',data).then((response) => {
             if(response.data.valid){
@@ -69,7 +76,7 @@
     <div class="  bordere modal-dialog">
       <div class=" rounded-0 modal-content" style="display: flex; justify-content: center; align-items: center;">
         <div class=" borderbtm gradient rounded-0   modal-header" >
-          <div class="h1 modal-title fs-5 title-font" id="ModalLabel" >
+          <div class="h1 modal-title fs-5 title-font" id="ModalLabel" style="color: black;">
             Login
           </div>
         </div>
@@ -88,8 +95,6 @@
 
   
 <style>
-
-
 
 .input
   {

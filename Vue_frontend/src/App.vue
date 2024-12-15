@@ -1,20 +1,13 @@
 <script setup>
- 
+  import Profile from "./components/Profile.vue";
   import ModelLogin from "./components/ModelLogin.vue";
   import { ref, onMounted } from 'vue';
-  import axios from 'axios';
-  const message = ref([]); 
+import NavBar from "./components/NavBar.vue";
+
   const currentUser = ref();
   const hasConnected = ref(false)
-  onMounted(() => {
-      axios.get('http://localhost:8080/api/getUsers').then((response) => {
-        message.value = response.data.users; 
-      }).catch(error => {
-        message.value = 'Erreur lors de la connexion au serveur.';
-      });
-  });
 
-  const SendUsernamefunc = ((data) =>{
+  const getUsername = ((data) =>{
     console.log(data)
     currentUser.value = data
     hasConnected.value = true
@@ -22,17 +15,27 @@
 
 
 
-
-
-
 </script>
 
 
 <template>
-  {{currentUser}}
+  <div class="container" style="height: 100%;">
+    <div class="row" style="height: 100%;">
+      <div class="col-3 rounded border ">
+        <NavBar :username="currentUser"></NavBar>
+        
+      </div>
+      <div class="col-9">
+        <RouterView></RouterView>
+      </div>  
+    </div>
+  </div>
+
+
 
   <div v-if="!hasConnected">
-      <ModelLogin  @SendUsername="SendUsernamefunc" ></ModelLogin>
+      <ModelLogin  @SendUsername="getUsername" ></ModelLogin>
     </div>
+
 </template>
 
