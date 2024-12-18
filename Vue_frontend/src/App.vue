@@ -1,8 +1,8 @@
 <script setup>
-  import Profile from "./components/Profile.vue";
+
   import ModelLogin from "./components/ModelLogin.vue";
   import { ref, onMounted } from 'vue';
-import NavBar from "./components/NavBar.vue";
+  import NavBar from "./components/NavBar.vue";
 
   const currentUser = ref();
   const hasConnected = ref(false)

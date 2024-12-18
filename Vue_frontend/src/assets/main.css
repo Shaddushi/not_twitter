@@ -22,7 +22,7 @@ body{
 a,
 .green {
   text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
+  color: #989FCE;
   transition: 0.4s;
   padding: 3px;
 }

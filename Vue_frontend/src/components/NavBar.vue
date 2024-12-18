@@ -11,8 +11,10 @@
 
 <template>
     <div class="main-nav-div">
+        <h2 style="color: #AAA1C8;"> Y</h2>
+
         <RouterLink  to="/home">Home</RouterLink>
-        <RouterLink   :to="{ name: 'profile', params: { profileName: username } }" style="bottom: 0;">{{ username }}</RouterLink>
+        <RouterLink   :to="{ name: 'profile', params: { profileName: username } }" class="mt-auto" style="margin-bottom: 15%;" >{{ username }}</RouterLink>
         
     </div>
 
@@ -29,9 +31,6 @@
         padding-top: 10%;
         height: 100%;
     }
-
-
-
 
 
 </style>
