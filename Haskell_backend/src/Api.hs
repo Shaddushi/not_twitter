@@ -44,4 +44,14 @@ apiRoutes = do
                                "pseudo" .= ("null" :: String),
                                "description" .= ("null" :: String),
                                "valid" .= False]
-
+    -- Route pour récupérer tout les tweets d'un utilisateur
+    post "/api/GetTweetUser" $ do
+        userData <- jsonData :: ActionM Text
+        returned_value <- liftIO $ withSQLite "twitter.db" (dbGetUserTweet userData)
+        if returned_value /= []
+            then
+                json $ object ["tweets" .= returned_value
+                              ,"valid" .= True]
+            else
+                json $ object ["tweets" .= ("null"::String)
+                              ,"valid" .= False]

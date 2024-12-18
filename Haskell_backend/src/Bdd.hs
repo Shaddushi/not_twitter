@@ -43,7 +43,7 @@ data Tweet = Tweet
     { tweet_id :: ID Tweet
     , tweet_content :: Text
     , creator_id :: ID User
-} deriving (Generic, Show)
+} deriving (Generic, Show,Eq)
 
 instance SqlRow Tweet
 instance ToJSON Tweet
@@ -90,6 +90,15 @@ dbGetUserInfo user = query $ do
     return u                                                                   
 
 
+dbGetUserTweet :: Text -> SeldaT SQLite IO[Tweet]
+dbGetUserTweet user = query $ do
+    u <- select user_table
+    t <- select tweet_table
+    restrict (u ! #user_name .== literal user)
+    restrict (t ! #creator_id .== u ! #user_id)
+    return t
+
+
 -- juste pour tester la bdd
 
 dbInit :: SeldaT SQLite IO ()
@@ -101,13 +110,15 @@ dbInit = do
         User def  "Charlie Chaplin" "a" "mdp" "howwa",
         User def  "Claude Perron" "a" "mdp" "aaaaaaaaaaa",
         User def   "Albert Dupontel" "a" "mdp" "i'm cscared of claude",
-        User def   "a" "a" "mdp" "i'm cscared of claude",           
+        User (toId 10)   "a" "a" "mdp" "i'm cscared of claude",           
         User def   "Fritz Lang" "a" "mdp" "Haskell movie next"] >>= liftIO . print
 
     createTable tweet_table
     tryInsert tweet_table
         [
-        Tweet def "today i'm sleepy" (toId 1),
-        Tweet def "Haskell >>>" (toId 3 ),
+        Tweet def "today i'm sleepy" (toId 2),
+        Tweet def "today i'm sleepy" (toId 3),
+        Tweet def "today i'm sleepy" (toId 10),
+        Tweet def "Haskell >>>" (toId 4 ),
         Tweet def "...." (toId 2 )  ] >>= liftIO . print
 
